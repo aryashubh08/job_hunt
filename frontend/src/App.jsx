@@ -8,6 +8,9 @@ import Jobs from "./Pages/Jobs";
 import Browse from "./Pages/Browse";
 import Profile from "./components/Profile";
 import JobDetails from "./components/JobDetails";
+import Companies from "./components/admin/Companies";
+import CreateCompanies from "./components/admin/CreateCompanies";
+import SetupCompany from "./components/admin/SetupCompany";
 
 const App = () => {
   return (
@@ -20,6 +23,11 @@ const App = () => {
         <Route path="/browse" element={<Browse />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/description/:id" element={<JobDetails />} />
+
+        {/* admin */}
+        <Route path="/admin/companies" element={<Companies />} />
+        <Route path="/admin/companies/create" element={<CreateCompanies />} />
+        <Route path="/admin/companies/:id" element={<SetupCompany />} />
       </Routes>
     </>
   );

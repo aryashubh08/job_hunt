@@ -44,9 +44,18 @@ const Navbar = () => {
         </Link>
         <div className="flex items-center justify-center gap-12">
           <div className="flex font-medium gap-4 items-center justify-center">
-            <Link to="/">Home</Link>
-            <Link to="/jobs">Jobs</Link>
-            <Link to="/browse">Browse</Link>
+            {user && user?.role === "recruiter" ? (
+              <>
+                <Link to="/admin/companies">Companies</Link>
+                <Link to="/admin/jobs">Jobs</Link>
+              </>
+            ) : (
+              <>
+                <Link to="/">Home</Link>
+                <Link to="/jobs">Jobs</Link>
+                <Link to="/browse">Browse</Link>
+              </>
+            )}
           </div>
           {!user ? (
             <div className="flex items-center gap-2">
@@ -82,12 +91,15 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className="flex flex-col text-gray-600 gap-2 my-2">
-                  <div className="flex w-fit items-center gap-6 cursor-pointer">
-                    <User2 className="text-lg" />
-                    <Link to="/profile" className="border-none">
-                      View Profile
-                    </Link>
-                  </div>
+                  {user && user?.role === "student" && (
+                    <div className="flex w-fit items-center gap-6 cursor-pointer">
+                      <User2 className="text-lg" />
+                      <Link to="/profile" className="border-none">
+                        View Profile
+                      </Link>
+                    </div>
+                  )}
+
                   <div className="flex w-fit items-center gap-6 cursor-pointer">
                     <LogOut className="text-lg" />
                     <Link onClick={logoutHandler} className="border-none">

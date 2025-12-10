@@ -32,7 +32,7 @@ const filterData = [
 
 const FilterCard = () => {
   return (
-    <div className="w-full bg-white p-3 sm:p-4 rounded-md shadow-md">
+    <div className="w-full h-full bg-white p-3 sm:p-4 rounded-md shadow-md">
       <h1 className="font-bold text-base sm:text-lg">Filter Jobs</h1>
       <hr className="mt-2 sm:mt-3" />
       <RadioGroup className="mt-2 sm:mt-3">
