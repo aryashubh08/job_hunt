@@ -175,68 +175,6 @@ exports.logout = async (req, res) => {
 };
 
 /* ===================================================================================
-   UPDATE USER PROFILE
-=================================================================================== */
-// exports.updateProfile = async (req, res) => {
-//   try {
-//     const { fullName, email, phoneNumber, bio, skills } = req.body;
-//     const userId = req.id; // 📌 Comes from Auth middleware
-
-//     if (!userId) {
-//       return res.status(401).json({ success: false, message: "Unauthorized" });
-//     }
-
-//     //  Build dynamic update object (only update provided fields)
-//     const updateData = {};
-
-//     if (fullName) updateData.fullName = fullName;
-//     if (email) updateData.email = email;
-//     if (phoneNumber) updateData.phoneNumber = phoneNumber;
-//     if (bio) updateData["profile.bio"] = bio;
-
-//     //  Convert comma-separated skills into an array
-//     if (skills) {
-//       updateData["profile.skills"] = skills
-//         .split(",")
-//         .map((s) => s.trim())
-//         .filter(Boolean);
-//     }
-
-//     // 🔄 Update and return latest user
-//     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
-//       new: true,
-//     });
-
-//     if (!updatedUser) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "User not found" });
-//     }
-
-//     // 🧹 Prepare safe data to send
-//     const safeUser = {
-//       userId: updatedUser._id,
-//       fullName: updatedUser.fullName,
-//       email: updatedUser.email,
-//       role: updatedUser.role,
-//       profile: updatedUser.profile,
-//     };
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Profile updated successfully",
-//       user: safeUser,
-//     });
-//   } catch (error) {
-//     console.error("Update profile error:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Server error",
-//     });
-//   }
-// };
-
-/* ===================================================================================
    UPDATE PROFILE – UPLOAD RESUME TO IMAGEKIT
 =================================================================================== */
 exports.updateProfile = async (req, res) => {

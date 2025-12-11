@@ -1,11 +1,11 @@
 import { setSingleCompany } from "@/store/slices/companySlice";
 import { setAllJobs } from "@/store/slices/jobSlice";
-import { COMPANY_API_END_POINT, JOBS_API_END_POINT } from "@/utils/constant";
+import { COMPANY_API_END_POINT } from "@/utils/constant";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-const useGetCompanyById = ({ id }) => {
+const useGetCompanyById = (id) => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchCompanyById = async () => {
@@ -19,10 +19,12 @@ const useGetCompanyById = ({ id }) => {
         if (data.success) {
           dispatch(setSingleCompany(data.company));
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchCompanyById();
-  }, [id]);
+  }, [id, dispatch]);
 };
 
 export default useGetCompanyById;

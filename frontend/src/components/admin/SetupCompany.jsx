@@ -12,9 +12,11 @@ import useGetCompanyById from "@/hooks/useGetCompanyById";
 import { useSelector } from "react-redux";
 
 const SetupCompany = () => {
+  const { id } = useParams();
+  useGetCompanyById(id);
   const { singleCompany } = useSelector((state) => state.company);
   const [loading, setLoading] = useState(false);
-  const { id } = useParams();
+
   console.log(id);
   const navigate = useNavigate();
   const [input, setInput] = useState({

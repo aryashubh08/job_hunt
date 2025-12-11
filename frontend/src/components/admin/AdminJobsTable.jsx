@@ -8,35 +8,32 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Avatar, AvatarImage } from "../ui/avatar";
+
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Edit2, MoreHorizontal } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const CompaniesTable = () => {
+const AdminJobsTable = () => {
   const navigate = useNavigate();
-  const { companies, searchCompanyByText } = useSelector(
-    (state) => state.company
-  );
-  console.log(companies);
+  const { allAdminJobs, searchJobByText } = useSelector((state) => state.job);
+  console.log(allAdminJobs);
 
-  const [filterCompany, setFilterCompany] = useState(companies);
+  const [filterJobs, setFilterJobs] = useState(allAdminJobs);
 
   useEffect(() => {
-    const filteredCompany =
-      companies.length >= 0 &&
-      companies.filter((company) => {
-        if (!searchCompanyByText) {
-          return true;
-        } else {
-          return company?.name
-            ?.toLowerCase()
-            .includes(searchCompanyByText.toLowerCase());
-        }
-      });
-    setFilterCompany(filteredCompany);
-  }, [companies, searchCompanyByText]);
+    console.log("called");
+    const filteredJobs = allAdminJobs.filter((job) => {
+      if (!searchJobByText) {
+        return true;
+      }
+      return (
+        job?.title?.toLowerCase().includes(searchJobByText.toLowerCase()) ||
+        job?.company?.name.toLowerCase().includes(searchJobByText.toLowerCase())
+      );
+    });
+    setFilterJobs(filteredJobs);
+  }, [allAdminJobs, searchJobByText]);
 
   return (
     <div className="w-full">
@@ -44,20 +41,20 @@ const CompaniesTable = () => {
       <div className="hidden md:block">
         <Table className="min-w-full">
           <TableCaption className="text-gray-500 mt-4">
-            A list of your recent registered companies
+            A list of your recent posted jobs
           </TableCaption>
 
           <TableHeader>
             <TableRow className="bg-gray-100">
-              <TableHead>Logo</TableHead>
-              <TableHead>Name</TableHead>
+              <TableHead>Company Name</TableHead>
+              <TableHead>Role</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {filterCompany.length === 0 ? (
+            {filterJobs.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={4}
@@ -67,16 +64,12 @@ const CompaniesTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              filterCompany.map((item, index) => (
+              filterJobs.map((item, index) => (
                 <TableRow key={item._id || index} className="hover:bg-gray-50">
-                  <TableCell>
-                    <Avatar>
-                      <AvatarImage src={item?.logo || "/assets/logo.png"} />
-                    </Avatar>
+                  <TableCell className="font-medium">
+                    {item?.company?.name}
                   </TableCell>
-
-                  <TableCell className="font-medium">{item?.name}</TableCell>
-
+                  <TableCell>{item?.title}</TableCell>
                   <TableCell>
                     {item?.createdAt ? item.createdAt.split("T")[0] : "No date"}
                   </TableCell>
@@ -109,23 +102,21 @@ const CompaniesTable = () => {
 
       {/* Mobile Card View */}
       <div className="grid md:hidden gap-4">
-        {companies.length === 0 ? (
+        {filterJobs.length === 0 ? (
           <p className="text-gray-500 text-center">
             You haven't registered any company yet.
           </p>
         ) : (
-          companies.map((item, index) => (
+          filterJobs.map((item, index) => (
             <div
               key={item._id || index}
               className="bg-white shadow-sm rounded-xl p-4 flex justify-between items-center border hover:shadow-md transition"
             >
               <div className="flex items-center gap-4">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={item?.logo || "/assets/logo.png"} />
-                </Avatar>
-
                 <div>
-                  <h3 className="font-semibold text-base">{item?.name}</h3>
+                  <h3 className="font-semibold text-base">
+                    {item?.company?.name}
+                  </h3>
                   <p className="text-sm text-gray-500">
                     {item?.createdAt ? item.createdAt.split("T")[0] : "No date"}
                   </p>
@@ -155,4 +146,4 @@ const CompaniesTable = () => {
   );
 };
 
-export default CompaniesTable;
+export default AdminJobsTable;

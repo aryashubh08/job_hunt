@@ -1,4 +1,5 @@
 const Company = require("../models/company");
+const imageKit = require("../config/imageKit.js");
 
 //==================================== Register Company ====================================
 exports.registerCompany = async (req, res) => {
@@ -116,9 +117,8 @@ exports.updateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
     const companyId = req.params.id;
-    const file = req.file; // for optional image upload (logo)
 
-    // ✔ Fetch company first to check ownership
+    // Find company
     const company = await Company.findById(companyId);
 
     if (!company) {
@@ -128,7 +128,7 @@ exports.updateCompany = async (req, res) => {
       });
     }
 
-    // ✔ Only allow recruiter who created this company to update it
+    // Authorization check
     if (company.userId.toString() !== req.id) {
       return res.status(403).json({
         success: false,
@@ -136,24 +136,43 @@ exports.updateCompany = async (req, res) => {
       });
     }
 
-    // ✔ Build update object dynamically (update only what user sends)
+    // Build update data dynamically
     const updateData = {};
+
     if (name) updateData.name = name;
     if (description) updateData.description = description;
     if (website) updateData.website = website;
     if (location) updateData.location = location;
 
-    // ✔ If an image file is provided, upload it (ImageKit logic later)
-    if (file) {
-      // TODO: upload to ImageKit or Cloudinary
-      // updateData.logo = uploadedImage.url
+    // ---------- OPTIONAL LOGO UPLOAD ----------
+    if (req.file) {
+      const fileBuffer = req.file.buffer;
+
+      const uploaded = await imageKit.upload({
+        file: fileBuffer,
+        fileName: req.file.originalname,
+        folder: "/jobHunt/company",
+      });
+
+      const optimizedImageUrl = imageKit.url({
+        src: uploaded.url,
+        transformation: [
+          {
+            width: "400",
+            quality: "auto",
+            format: "webp",
+          },
+        ],
+      });
+
+      updateData.logo = optimizedImageUrl;
     }
 
-    // ✔ Update company in DB
+    // Update in DB
     const updatedCompany = await Company.findByIdAndUpdate(
       companyId,
       updateData,
-      { new: true } // return updated version
+      { new: true }
     );
 
     return res.status(200).json({

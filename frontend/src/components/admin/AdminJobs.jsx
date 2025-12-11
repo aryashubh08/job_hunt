@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../shared/Navbar";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import CompaniesTable from "./CompaniesTable";
-import { useNavigate } from "react-router-dom";
-import useGetAllCompanies from "@/hooks/useGetAllCompanies";
-import { useDispatch } from "react-redux";
 import { setSearchCompanyByText } from "@/store/slices/companySlice";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../shared/Navbar";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import AdminJobsTable from "./AdminJobsTable";
+import useGetAllAdminJobs from "@/hooks/useGetAllAdminJobs";
+import { setSearchJobByText } from "@/store/slices/jobSlice";
 
-const Companies = () => {
+const AdminJobs = () => {
+  useGetAllAdminJobs();
   const navigate = useNavigate();
-  useGetAllCompanies();
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setSearchCompanyByText(search));
+    dispatch(setSearchJobByText(search));
   }, [search]);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -32,20 +32,20 @@ const Companies = () => {
           />
 
           <Button
-            onClick={() => navigate("/admin/companies/create")}
+            onClick={() => navigate("/admin/jobs/create")}
             className="w-full sm:w-auto"
           >
-            New Company
+            Post New Jobs
           </Button>
         </div>
 
         {/* Table */}
         <div className="mt-8">
-          <CompaniesTable />
+          <AdminJobsTable />
         </div>
       </div>
     </div>
   );
 };
 
-export default Companies;
+export default AdminJobs;
